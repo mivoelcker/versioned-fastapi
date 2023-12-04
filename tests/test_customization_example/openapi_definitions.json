@@ -1,0 +1,457 @@
+{
+  "v1": {
+    "openapi": "3.1.0",
+    "info": {
+      "title": "Customized example API - Version 1",
+      "summary": "Customized example of Versioned FastAPI - Version 1",
+      "description": "Use FastAPI parameters to customize your app as usual.",
+      "version": "1.2.3"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:8000",
+        "description": "Localhost"
+      },
+      {
+        "url": "http://127.0.0.1:8000",
+        "description": "Loopback"
+      }
+    ],
+    "paths": {
+      "/version1/cookies": {
+        "post": {
+          "tags": [
+            "Cookies"
+        ],
+          "summary": "Bake Cookie",
+          "operationId": "bake_cookie_version1_cookies_post",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cookie"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "202": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "integer",
+                    "title": "Response Bake Cookie Version1 Cookies Post"
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/version1/cookies/{cookie_id}": {
+        "get": {
+          "tags": [
+            "Cookies"
+        ],
+          "summary": "Get Cookie",
+          "description": "Returns cookie, but cookie might be burned or not backed enough.",
+          "operationId": "get_cookie_version1_cookies__cookie_id__get",
+          "deprecated": true,
+          "parameters": [
+            {
+              "name": "cookie_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "title": "Cookie Id"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "string",
+                    "title": "Response Get Cookie Version1 Cookies  Cookie Id  Get"
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/version1/cake": {
+        "get": {
+            "tags": [
+                "Cake"
+            ],
+            "summary": "Get Cake",
+            "operationId": "get_cake_version1_cake_get",
+            "responses": {
+                "200": {
+                    "description": "Successful Response",
+                    "content": {
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                }
+            }
+        }
+    }
+    },
+    "components": {
+      "schemas": {
+        "Cookie": {
+          "properties": {
+            "butter": {
+              "type": "number",
+              "title": "Butter"
+            },
+            "chocolate": {
+              "type": "number",
+              "title": "Chocolate"
+            },
+            "eggs": {
+              "type": "integer",
+              "title": "Eggs"
+            },
+            "flour": {
+              "type": "number",
+              "title": "Flour"
+            },
+            "salt": {
+              "type": "number",
+              "title": "Salt"
+            },
+            "sugar": {
+              "type": "number",
+              "title": "Sugar"
+            },
+            "vanilla": {
+              "type": "number",
+              "title": "Vanilla"
+            },
+            "heat": {
+              "type": "number",
+              "title": "Heat"
+            },
+            "baking_time": {
+              "type": "number",
+              "title": "Baking Time"
+            }
+          },
+          "type": "object",
+          "required": [
+            "butter",
+            "chocolate",
+            "eggs",
+            "flour",
+            "salt",
+            "sugar",
+            "vanilla",
+            "heat",
+            "baking_time"
+          ],
+          "title": "Cookie",
+          "description": "Cookie recipe. Units may have been lost in translation..."
+        },
+        "HTTPValidationError": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError"
+        },
+        "ValidationError": {
+          "properties": {
+            "loc": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ]
+              },
+              "type": "array",
+              "title": "Location"
+            },
+            "msg": {
+              "type": "string",
+              "title": "Message"
+            },
+            "type": {
+              "type": "string",
+              "title": "Error Type"
+            }
+          },
+          "type": "object",
+          "required": [
+            "loc",
+            "msg",
+            "type"
+          ],
+          "title": "ValidationError"
+        }
+      }
+    },
+    "tags": [
+      {
+          "name": "Cookies",
+          "description": "Cookies are delicious."
+      },
+      {
+          "name": "Cake",
+          "description": "The cake is a lie."
+      }
+  ]
+  },
+  "v2": {
+    "openapi": "3.1.0",
+    "info": {
+      "title": "Customized example API - Version 2",
+      "summary": "Customized example of Versioned FastAPI - Version 2",
+      "description": "Use FastAPI parameters to customize your app as usual.",
+      "version": "1.2.3"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:8000",
+        "description": "Localhost"
+      },
+      {
+        "url": "http://127.0.0.1:8000",
+        "description": "Loopback"
+      }
+    ],
+    "paths": {
+      "/version2/cookies": {
+        "post": {
+          "tags": [
+            "Cookies"
+        ],
+          "summary": "Bake Cookie",
+          "operationId": "bake_cookie_version2_cookies_post",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cookie"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "202": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "integer",
+                    "title": "Response Bake Cookie Version2 Cookies Post"
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/version2/cookies/{cookie_id}": {
+        "get": {
+          "tags": [
+            "Cookies"
+        ],
+          "summary": "Get Cookie Default Version",
+          "description": "Returns perfectly backed cookie.",
+          "operationId": "get_cookie_default_version_version2_cookies__cookie_id__get",
+          "parameters": [
+            {
+              "name": "cookie_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "title": "Cookie Id"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {}
+                }
+              }
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Cookie": {
+          "properties": {
+            "butter": {
+              "type": "number",
+              "title": "Butter"
+            },
+            "chocolate": {
+              "type": "number",
+              "title": "Chocolate"
+            },
+            "eggs": {
+              "type": "integer",
+              "title": "Eggs"
+            },
+            "flour": {
+              "type": "number",
+              "title": "Flour"
+            },
+            "salt": {
+              "type": "number",
+              "title": "Salt"
+            },
+            "sugar": {
+              "type": "number",
+              "title": "Sugar"
+            },
+            "vanilla": {
+              "type": "number",
+              "title": "Vanilla"
+            },
+            "heat": {
+              "type": "number",
+              "title": "Heat"
+            },
+            "baking_time": {
+              "type": "number",
+              "title": "Baking Time"
+            }
+          },
+          "type": "object",
+          "required": [
+            "butter",
+            "chocolate",
+            "eggs",
+            "flour",
+            "salt",
+            "sugar",
+            "vanilla",
+            "heat",
+            "baking_time"
+          ],
+          "title": "Cookie",
+          "description": "Cookie recipe. Units may have been lost in translation..."
+        },
+        "HTTPValidationError": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError"
+        },
+        "ValidationError": {
+          "properties": {
+            "loc": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ]
+              },
+              "type": "array",
+              "title": "Location"
+            },
+            "msg": {
+              "type": "string",
+              "title": "Message"
+            },
+            "type": {
+              "type": "string",
+              "title": "Error Type"
+            }
+          },
+          "type": "object",
+          "required": [
+            "loc",
+            "msg",
+            "type"
+          ],
+          "title": "ValidationError"
+        }
+      }
+    },
+    "tags": [
+      {
+          "name": "Cookies",
+          "description": "Cookies are delicious."
+      }
+  ]
+  }
+}

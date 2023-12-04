@@ -1,0 +1,13 @@
+# Python
+**/__pycache__/
+**/.pytest_cache/
+/dist/
+
+# Editors
+.idea/
+.vscode/
+
+# Environments
+.env
+.venv/
+ven/
