@@ -1,6 +1,7 @@
 import random
 from datetime import datetime
 from pathlib import Path
+from typing import Dict
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
@@ -23,7 +24,7 @@ class Cookie(BaseModel):
     baking_time: float
 
 
-oven: dict[int, Cookie] = {}
+oven: Dict[int, Cookie] = {}
 
 # All FastAPI parameters should be work as intended
 app = FastAPI(

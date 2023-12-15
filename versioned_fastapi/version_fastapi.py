@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Callable, TypeVar, Any, Iterable, Union, List, Dict
+from typing import Callable, Tuple, TypeVar, Any, Iterable, Union, List, Dict
 
 from fastapi import FastAPI, APIRouter, Request
 from fastapi.openapi.docs import get_swagger_ui_html
@@ -71,7 +71,7 @@ class FastApiVersioner:
             If True, only tags used by the selected version will be displayed in swagger. Will not effect the "All Routes" version.
         """
         self.app = app
-        self.default_version: str | None = str(default_version) if default_version is not None else None
+        self.default_version: Union[str, None] = str(default_version) if default_version is not None else None
         self.prefix_format = prefix_format
         self.primary_swagger_version = primary_swagger_version and str(primary_swagger_version)
         self.include_main_openapi = include_all_routes
@@ -97,7 +97,7 @@ class FastApiVersioner:
 
         return versions
 
-    def _get_routes(self) -> tuple[Dict[str, List[APIRoute]], List[BaseRoute]]:
+    def _get_routes(self) -> Tuple[Dict[str, List[APIRoute]], List[BaseRoute]]:
         """Gets versions and routes."""
         routes_by_version: Dict[str, List[APIRoute]] = defaultdict(list)
         routes_to_remove: List[BaseRoute] = []

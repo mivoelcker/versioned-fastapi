@@ -21,10 +21,12 @@ pip install versioned-fastapi
 ```
 
 ## Usage
+> For more examples see the [examples](./examples/) directory.
 
 A minimalistic example of how to use Versioned FastAPI:
 
 ```python
+from typing import Dict, Union
 from fastapi import FastAPI, APIRouter, HTTPException
 from pydantic import BaseModel
 from versioned_fastapi import version, FastApiVersioner
@@ -43,7 +45,7 @@ class ItemV2(BaseModel):
 
 
 # Example db
-db: dict[int, Item | ItemV2] = {}
+db: Dict[int, Union[Item, ItemV2]] = {}
 
 # Create the FastAPI app ...
 app = FastAPI(
@@ -78,7 +80,7 @@ async def create_item_v2(item: ItemV2) -> ItemV2:
 # This endpoint will be available at "/v1/items/{item_id}"
 @version(1)
 @items_router.get("/{item_id}")
-async def get_item(item_id: int) -> Item | ItemV2:
+async def get_item(item_id: int) -> Union[Item, ItemV2]:
     if item_id in db:
         return db[item_id]
     raise HTTPException(status_code=404, detail="Item not found")

@@ -11,6 +11,7 @@ pytest = "*"
 uvicorn = "*"
 pydantic = "==2.*"
 httpx = "*"
+hatch = "*"
 
 [requires]
 python_version = "3.11"
