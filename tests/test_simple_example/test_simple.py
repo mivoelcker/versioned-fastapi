@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+import pytest
 from fastapi.testclient import TestClient
 
 from examples.simple import app, versions
@@ -53,15 +54,19 @@ def test_simple_example():
     assert test_client.get("v3/items/3").status_code == 404
 
 
-def test_openapi_and_docs():
+@pytest.mark.openapi_test
+def test_openapi():
     test_client = TestClient(app)
     openapi_definitions = json.loads((Path(__file__).parent / "openapi_definitions.json").read_text())
 
-    assert test_client.get("/openapi.json").status_code == 200
+    assert test_client.get("/openapi.json").json() == openapi_definitions["all"]
     assert test_client.get("/v1/openapi.json").json() == openapi_definitions["v1"]
     assert test_client.get("/v2/openapi.json").json() == openapi_definitions["v2"]
     assert test_client.get("/v3/openapi.json").json() == openapi_definitions["v3"]
 
+
+def test_docs():
+    test_client = TestClient(app)
     assert test_client.get("/docs").status_code == 200
     assert test_client.get("/redoc").status_code == 200
 

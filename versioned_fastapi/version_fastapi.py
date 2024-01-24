@@ -35,8 +35,8 @@ class FastApiVersioner:
     summary_format: str = "{summary}"
     """Defines the format of the swagger summary, can contain "{summary}" and "{version}". Available since OpenAPI 3.1.0, FastAPI 0.99.0."""
     swagger_js_urls: Iterable[str] = (
-        "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.3/swagger-ui-bundle.js",
-        "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.3/swagger-ui-standalone-preset.js"
+        "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js",
+        "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-standalone-preset.js"
     )
     """The URLs to use to load the Swagger UI JavaScript."""
     swagger_css_urls: Union[Iterable[str], None] = None

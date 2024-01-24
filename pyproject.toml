@@ -19,18 +19,23 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
 ]
 dependencies = ["fastapi>=0.88.0", ]
-version = "0.0.1"
+dynamic = ["version"]
+
+[tool.hatch.version]
+path = "versioned_fastapi/__init__.py"
 
 
 [project.urls]
 Documentation = "https://github.com/mivoelcker/versioned-fastapi#readme"
-Issues = "https://github.com/mivoelcker/versioned-fastapi/issues"
 Source = "https://github.com/mivoelcker/versioned-fastapi"
+
+
+[tool.hatch.build.targets.wheel]
+packages = ["versioned_fastapi"]
 
 
 [tool.hatch.envs.tests]
 dependencies = [
-  "fastapi",
   "pytest",
   "httpx",
   "uvicorn"
@@ -42,5 +47,17 @@ python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
 [tool.hatch.envs.tests.scripts]
 test = "pytest {args:tests}"
 
-[tool.hatch.build.targets.wheel]
-packages = ["versioned_fastapi"]
+
+[[tool.hatch.envs.tests-fastapi.matrix]]
+fastapi_version = ["0.88.0", "0.90.0", "0.100.0", "0.105.0"]
+
+[tool.hatch.envs.tests-fastapi]
+dependencies = [
+  "fastapi~={matrix:fastapi_version}",
+  "pytest",
+  "httpx",
+  "uvicorn"
+]
+
+[tool.hatch.envs.tests-fastapi.scripts]
+test = "pytest --skip-openapi-tests {args:tests}"

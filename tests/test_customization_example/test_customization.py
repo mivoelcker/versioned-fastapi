@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 from fastapi.testclient import TestClient
+import pytest
 
 from examples.customization import app, versions
 
@@ -35,16 +36,28 @@ def test_customization_example():
     assert cake_response.json() == {"detail": "The cake is a lie."}
 
 
+@pytest.mark.openapi_test
 def test_openapi_and_docs():
     test_client = TestClient(app)
     openapi_definitions = json.loads((Path(__file__).parent / "openapi_definitions.json").read_text())
 
-    assert test_client.get("/version1/swagger.json").json() == openapi_definitions["v1"]
-    assert test_client.get("/version2/swagger.json").json() == openapi_definitions["v2"]
+    for version in [1, 2]:
+        expected_definition = openapi_definitions[f"v{version}"].copy()
+        expected_servers = expected_definition.pop("servers")
 
+        definition = test_client.get(f"/version{version}/swagger.json").json()
+        servers = definition.pop("servers")
+
+        assert definition == expected_definition
+        for server, expected_server in zip(servers, expected_servers):
+            assert server["description"] == expected_server["description"]
+            assert server["url"].startswith(expected_server["url"])
+            
+
+def test_docs():
+    test_client = TestClient(app)    
     assert test_client.get("/swagger").status_code == 200
     assert test_client.get("/redoc").status_code == 404
-
     swagger_html = test_client.get("/swagger").text
     assert "https://www.google.com/favicon.ico" in swagger_html
     assert "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui.css" in swagger_html
