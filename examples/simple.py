@@ -33,10 +33,7 @@ app = FastAPI(
 )
 
 # ... and routers as normal
-items_router = APIRouter(
-    prefix="/items",
-    tags=["Items"]
-)
+items_router = APIRouter(prefix="/items", tags=["Items"])
 
 
 # Use the @version annotation to add a version
@@ -101,5 +98,9 @@ versions = FastApiVersioner(
 ).version_fastapi()
 
 
-if __name__ == '__main__':
-    uvicorn.run(f"{Path(__file__).stem}:app", reload=True, reload_dirs=[".", "../versioned_fastapi"])
+if __name__ == "__main__":
+    uvicorn.run(
+        f"{Path(__file__).stem}:app",
+        reload=True,
+        reload_dirs=[".", "../versioned_fastapi"],
+    )

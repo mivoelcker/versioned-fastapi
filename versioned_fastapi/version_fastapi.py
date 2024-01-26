@@ -8,7 +8,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.routing import APIRoute
 from starlette.routing import BaseRoute
 
-CallableT = TypeVar('CallableT', bound=Callable[..., Any])
+CallableT = TypeVar("CallableT", bound=Callable[..., Any])
 
 
 def version(*version: Union[int, str, None]) -> Callable[[CallableT], CallableT]:
@@ -35,14 +35,13 @@ class FastApiVersioner:
     """Defines the format of the swagger summary, can contain "{summary}" and "{version}". Available since OpenAPI 3.1.0, FastAPI 0.99.0."""
     swagger_js_urls: Iterable[str] = (
         "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js",
-        "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-standalone-preset.js"
+        "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-standalone-preset.js",
     )
     """The URLs to use to load the Swagger UI JavaScript."""
     swagger_css_urls: Union[Iterable[str], None] = None
     """The URLs to use to load Swagger UI CSS. Leave None to use FastAPIs default."""
     swagger_favicon_url: Union[str, None] = None
     """The URL of the favicon to use. Leave None to use FastAPIs default."""
-
 
     def __init__(
         self,
@@ -70,9 +69,13 @@ class FastApiVersioner:
             If True, only tags used by the selected version will be displayed in swagger. Will not effect the "All Routes" version.
         """
         self.app = app
-        self.default_version: Union[str, None] = str(default_version) if default_version is not None else None
+        self.default_version: Union[str, None] = (
+            str(default_version) if default_version is not None else None
+        )
         self.prefix_format = prefix_format
-        self.primary_swagger_version = primary_swagger_version and str(primary_swagger_version)
+        self.primary_swagger_version = primary_swagger_version and str(
+            primary_swagger_version
+        )
         self.include_main_openapi = include_all_routes
         self.filter_tags = filter_tags
 
@@ -84,7 +87,9 @@ class FastApiVersioner:
             All used versions as sorted list of strings.
         """
         routes_by_version, routes_to_remove = self._get_routes()
-        self.app.router.routes = [r for r in self.app.router.routes if r not in routes_to_remove]
+        self.app.router.routes = [
+            r for r in self.app.router.routes if r not in routes_to_remove
+        ]
 
         for version, routes in routes_by_version.items():
             router = self._create_versioned_router(version, routes)
@@ -103,7 +108,9 @@ class FastApiVersioner:
 
         for route in self.app.routes:
             if isinstance(route, APIRoute):
-                route_versions: List[Union[str, None]] = getattr(route.endpoint, '_route_version', [self.default_version])
+                route_versions: List[Union[str, None]] = getattr(
+                    route.endpoint, "_route_version", [self.default_version]
+                )
                 for version in route_versions:
                     if version is not None:
                         routes_by_version[version].append(route)
@@ -113,7 +120,9 @@ class FastApiVersioner:
 
         return routes_by_version, routes_to_remove
 
-    def _create_versioned_router(self, version: str, routes: List[APIRoute]) -> APIRouter:
+    def _create_versioned_router(
+        self, version: str, routes: List[APIRoute]
+    ) -> APIRouter:
         """Creates a routes with all routes."""
         version_prefix = self.prefix_format.format(version=version)
         _router = APIRouter()
@@ -128,7 +137,9 @@ class FastApiVersioner:
         """Adds an openapi route to the router."""
         openapi_kwargs = {
             "title": self.title_format.format(title=self.app.title, version=version),
-            "description": self.description_format.format(description=self.app.description, version=version),
+            "description": self.description_format.format(
+                description=self.app.description, version=version
+            ),
             "version": self.app.version,
             "terms_of_service": self.app.terms_of_service,
             "contact": self.app.contact,
@@ -140,7 +151,9 @@ class FastApiVersioner:
         }
         # Available since OpenAPI 3.1.0, FastAPI 0.99.0.
         if summary := getattr(self.app, "summary", None):
-            openapi_kwargs["summary"] = self.summary_format.format(summary=summary, version=version)
+            openapi_kwargs["summary"] = self.summary_format.format(
+                summary=summary, version=version
+            )
         if webhooks := getattr(self.app, "webhooks", None):
             openapi_kwargs["webhooks"] = webhooks.routes
         # Available since FastAPI 0.102.0
@@ -154,7 +167,9 @@ class FastApiVersioner:
                 for path in openapi_definition["paths"].values():
                     for method in path.values():
                         used_tags.update(method.get("tags", []))
-                openapi_definition["tags"] = [t for t in openapi_definition["tags"] if t["name"] in used_tags]
+                openapi_definition["tags"] = [
+                    t for t in openapi_definition["tags"] if t["name"] in used_tags
+                ]
             return JSONResponse(openapi_definition)
 
         router.add_route(
@@ -170,46 +185,66 @@ class FastApiVersioner:
         if self.include_main_openapi:
             openapi_urls.append({"name": "All Routes", "url": self.app.openapi_url})
         openapi_urls.extend(
-            [{
-                "name": f"Version {v}",
-                "url": f"{self.prefix_format.format(version=v)}{self.app.openapi_url}"
-            } for v in versions]
+            [
+                {
+                    "name": f"Version {v}",
+                    "url": f"{self.prefix_format.format(version=v)}{self.app.openapi_url}",
+                }
+                for v in versions
+            ]
         )
         swagger_html_kwargs = {
             "swagger_js_url": '"></script><script src="'.join(self.swagger_js_urls),
-            "swagger_ui_parameters": {"layout": "StandaloneLayout", "urls": openapi_urls},
+            "swagger_ui_parameters": {
+                "layout": "StandaloneLayout",
+                "urls": openapi_urls,
+            },
             "title": self.app.title + " - Swagger UI",
         }
         if self.primary_swagger_version:
-            swagger_html_kwargs["swagger_ui_parameters"]["urls.primaryName"] = f"Version {self.primary_swagger_version}"
+            swagger_html_kwargs["swagger_ui_parameters"][
+                "urls.primaryName"
+            ] = f"Version {self.primary_swagger_version}"
         if self.swagger_css_urls:
-            swagger_html_kwargs["swagger_css_url"] = '"><link type="text/css" rel="stylesheet" href="'.join(
-                self.swagger_css_urls)
+            swagger_html_kwargs[
+                "swagger_css_url"
+            ] = '"><link type="text/css" rel="stylesheet" href="'.join(
+                self.swagger_css_urls
+            )
         if self.swagger_favicon_url:
             swagger_html_kwargs["swagger_favicon_url"] = self.swagger_favicon_url
 
         async def get_versioned_swagger_ui_html(request: Request) -> HTMLResponse:
             root_path = request.scope.get("root_path", "").rstrip("/")
             openapi_url = root_path + self.app.openapi_url  # type: ignore
-            oauth2_redirect_url = self.app.swagger_ui_oauth2_redirect_url and root_path + self.app.swagger_ui_oauth2_redirect_url
+            oauth2_redirect_url = (
+                self.app.swagger_ui_oauth2_redirect_url
+                and root_path + self.app.swagger_ui_oauth2_redirect_url
+            )
             if root_path:
                 for openapi_url in swagger_html_kwargs["swagger_ui_parameters"]["urls"]:
                     openapi_url["url"] = root_path + openapi_url["url"]
 
-            swagger_html_kwargs.update({
-                "openapi_url": openapi_url,  # Will be overridden by 'urls' anyway
-                "oauth2_redirect_url": oauth2_redirect_url,
-            })
+            swagger_html_kwargs.update(
+                {
+                    "openapi_url": openapi_url,  # Will be overridden by 'urls' anyway
+                    "oauth2_redirect_url": oauth2_redirect_url,
+                }
+            )
             if self.app.swagger_ui_parameters:
-                swagger_html_kwargs["swagger_ui_parameters"].update(self.app.swagger_ui_parameters)
+                swagger_html_kwargs["swagger_ui_parameters"].update(
+                    self.app.swagger_ui_parameters
+                )
 
             # It might be better to override get_swagger_ui_html completely instead of modifying its response...
             html_body = get_swagger_ui_html(**swagger_html_kwargs).body
             html_body = html_body.replace(
                 b"SwaggerUIBundle.SwaggerUIStandalonePreset",
-                b"SwaggerUIStandalonePreset"
+                b"SwaggerUIStandalonePreset",
             )
-            html_body = html_body.replace(b"<body>", b"<body style='margin:0;padding:0'>")
+            html_body = html_body.replace(
+                b"<body>", b"<body style='margin:0;padding:0'>"
+            )
             return HTMLResponse(html_body)
 
         self.app.add_route(

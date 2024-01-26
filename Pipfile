@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 fastapi = ">=0.88.0"
+pre-commit = "*"
 
 [dev-packages]
 pytest = "*"
@@ -14,4 +15,4 @@ httpx = "*"
 hatch = "*"
 
 [requires]
-python_version = "3.11"
+python_version = "3.12"

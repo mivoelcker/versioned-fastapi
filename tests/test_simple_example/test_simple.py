@@ -20,8 +20,8 @@ def test_simple_example():
 
     # Version 1
     v1_body = {
-      "id": 1,
-      "name": "Item 1",
+        "id": 1,
+        "name": "Item 1",
     }
     assert test_client.post("/v1/items", json=v1_body).status_code == 201
     assert test_client.get("v1/items").status_code == 200
@@ -29,9 +29,9 @@ def test_simple_example():
 
     # Version 2
     v2_body = {
-      "id": 2,
-      "name": "Item 2",
-      "description": "The cake is al lie?",
+        "id": 2,
+        "name": "Item 2",
+        "description": "The cake is al lie?",
     }
     assert test_client.post("/v2/items", json=v2_body).status_code == 201
     assert test_client.get("v2/items/2").status_code == 200
@@ -57,7 +57,9 @@ def test_simple_example():
 @pytest.mark.openapi_test
 def test_openapi():
     test_client = TestClient(app)
-    openapi_definitions = json.loads((Path(__file__).parent / "openapi_definitions.json").read_text())
+    openapi_definitions = json.loads(
+        (Path(__file__).parent / "openapi_definitions.json").read_text()
+    )
 
     assert test_client.get("/openapi.json").json() == openapi_definitions["all"]
     assert test_client.get("/v1/openapi.json").json() == openapi_definitions["v1"]
@@ -72,5 +74,10 @@ def test_docs():
 
     swagger_html = test_client.get("/docs").text
     assert "StandaloneLayout" in swagger_html
-    for url in ("/openapi.json", "/v1/openapi.json", "/v2/openapi.json", "/v2/openapi.json"):
+    for url in (
+        "/openapi.json",
+        "/v1/openapi.json",
+        "/v2/openapi.json",
+        "/v2/openapi.json",
+    ):
         assert url in swagger_html
