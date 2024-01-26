@@ -1,8 +1,8 @@
 import json
 from pathlib import Path
 
-from fastapi.testclient import TestClient
 import pytest
+from fastapi.testclient import TestClient
 
 from examples.customization import app, versions
 
@@ -52,10 +52,10 @@ def test_openapi_and_docs():
         for server, expected_server in zip(servers, expected_servers):
             assert server["description"] == expected_server["description"]
             assert server["url"].startswith(expected_server["url"])
-            
+
 
 def test_docs():
-    test_client = TestClient(app)    
+    test_client = TestClient(app)
     assert test_client.get("/swagger").status_code == 200
     assert test_client.get("/redoc").status_code == 404
     swagger_html = test_client.get("/swagger").text

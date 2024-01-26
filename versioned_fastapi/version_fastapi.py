@@ -1,13 +1,12 @@
 from collections import defaultdict
-from typing import Callable, Tuple, TypeVar, Any, Iterable, Union, List, Dict
+from typing import Any, Callable, Dict, Iterable, List, Tuple, TypeVar, Union
 
-from fastapi import FastAPI, APIRouter, Request
+from fastapi import APIRouter, FastAPI, Request
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.openapi.utils import get_openapi
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.routing import APIRoute
 from starlette.routing import BaseRoute
-
 
 CallableT = TypeVar('CallableT', bound=Callable[..., Any])
 
@@ -160,7 +159,7 @@ class FastApiVersioner:
 
         router.add_route(
             router.prefix + self.app.openapi_url,  # type: ignore
-            get_versioned_openapi, 
+            get_versioned_openapi,
             include_in_schema=False,
         )
 
@@ -215,6 +214,6 @@ class FastApiVersioner:
 
         self.app.add_route(
             self.app.docs_url,  # type: ignore
-            get_versioned_swagger_ui_html, 
+            get_versioned_swagger_ui_html,
             include_in_schema=False,
         )

@@ -29,29 +29,32 @@ path = "versioned_fastapi/__init__.py"
 Documentation = "https://github.com/mivoelcker/versioned-fastapi#readme"
 Source = "https://github.com/mivoelcker/versioned-fastapi"
 
+[tool.hatch.build.targets.sdist]
+exclude = ["/.github"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["versioned_fastapi"]
 
 
-[tool.hatch.envs.tests]
+[tool.hatch.envs.default]
 dependencies = [
   "pytest",
   "httpx",
   "uvicorn"
 ]
 
-[[tool.hatch.envs.tests.matrix]]
-python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
-
-[tool.hatch.envs.tests.scripts]
+[tool.hatch.envs.default.scripts]
 test = "pytest {args:tests}"
 
 
-[[tool.hatch.envs.tests-fastapi.matrix]]
+[[tool.hatch.envs.python.matrix]]
+python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+
+[[tool.hatch.envs.fastapi.matrix]]
 fastapi_version = ["0.88.0", "0.90.0", "0.100.0", "0.105.0"]
 
-[tool.hatch.envs.tests-fastapi]
+[tool.hatch.envs.fastapi]
 dependencies = [
   "fastapi~={matrix:fastapi_version}",
   "pytest",
@@ -59,5 +62,5 @@ dependencies = [
   "uvicorn"
 ]
 
-[tool.hatch.envs.tests-fastapi.scripts]
+[tool.hatch.envs.fastapi.scripts]
 test = "pytest --skip-openapi-tests {args:tests}"

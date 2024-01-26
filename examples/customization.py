@@ -7,7 +7,7 @@ import uvicorn
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, PrivateAttr
 
-from versioned_fastapi import version, FastApiVersioner
+from versioned_fastapi import FastApiVersioner, version
 
 
 class Cookie(BaseModel):
