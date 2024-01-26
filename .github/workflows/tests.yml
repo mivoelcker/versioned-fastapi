@@ -18,6 +18,6 @@ jobs:
       - name: Python Setup
         uses: actions/setup-python@v5
       - name: Install hatch
-        uses: pip install hatch
+        run: pip install hatch
       - name: Run Tests
         run: hatch run test
