@@ -9,8 +9,30 @@ on:
       - main
 
 jobs:
+  check:
+    name: "Check linter and format"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+        
+      - name: "Check linter"
+        uses: chartboost/ruff-action@v1
+      
+      - name: "Check format"
+        uses: chartboost/ruff-action@v1
+        with:
+          options: format
+          args: --check
+
+
   tests:
-    name: "Run tests"
+    name: "Run tests with python ${{ matrix.python-version }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:

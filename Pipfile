@@ -1,3 +1,5 @@
+# This Pipefile is just for local development
+# See pyproject.toml for necessary dependencies
 [[source]]
 url = "https://pypi.org/simple"
 verify_ssl = true
@@ -5,14 +7,15 @@ name = "pypi"
 
 [packages]
 fastapi = ">=0.88.0"
-pre-commit = "*"
 
 [dev-packages]
+hatch = "*"
+ruff = "*"
+pre-commit = "*"
 pytest = "*"
 uvicorn = "*"
 pydantic = "==2.*"
 httpx = "*"
-hatch = "*"
 
 [requires]
 python_version = "3.12"
