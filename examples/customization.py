@@ -52,9 +52,7 @@ app = FastAPI(
 # You can add multiple versions
 @version(1, 2)
 @app.post("/cookies", status_code=202, tags=["Cookies"])
-async def bake_cookie(
-    cookie: Cookie
-        ) -> int:
+async def bake_cookie(cookie: Cookie) -> int:
     cookie_id = random.randint(0, 127)  # Seems fine...
     oven[cookie_id] = cookie
     return cookie_id

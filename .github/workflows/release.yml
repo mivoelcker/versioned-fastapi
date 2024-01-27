@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  release:
+      types: [published]
+
+jobs: 
+  release:
+    name: "Build and publish package"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: "Install hatch"
+        run: |
+          python -m pip install --upgrade pip
+          pip install hatch
+      
+      - name: "Check release version"
+        run: bash scripts/check_version.sh "${{ github.ref_name }}"
+      
+      - name: "Build package"
+        run: hatch build
+
+      # - name: "Publish to Pypi"
+      #   uses: pypa/gh-action-pypi-publish@v1.8.11
+      #   with: 
+      #     password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+
+      

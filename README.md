@@ -1,6 +1,6 @@
 # Versioned FastAPI
 
-Versioned FastAPI simplifies the versioning of FastAPI web applications.
+Versioned FastAPI simplifies the versioning of [FastAPI](https://github.com/tiangolo/fastapi) web applications.
 This package is mainly designed for versioning of single endpoints.
 It can also be used for versioning of entire APIs,
 but then other packages like [FastAPI Versionizer](https://github.com/alexschimpf/fastapi-versionizer) might be a better
