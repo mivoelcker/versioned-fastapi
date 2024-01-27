@@ -27,8 +27,7 @@ jobs:
       - name: "Check format"
         uses: chartboost/ruff-action@v1
         with:
-          options: format
-          args: --check
+          args: format --check
 
 
   tests:
