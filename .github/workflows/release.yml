@@ -24,13 +24,16 @@ jobs:
       
       - name: "Check release version"
         run: bash scripts/check_version.sh "${{ github.ref_name }}"
+
+      - name: "Replace relative markdown links"
+        run: python3 scripts/replace_relative_md_links.py --github-repo "${{ github.repository }}" README.md
       
       - name: "Build package"
         run: hatch build
 
-      # - name: "Publish to Pypi"
-      #   uses: pypa/gh-action-pypi-publish@v1.8.11
-      #   with: 
-      #     password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+      - name: "Publish to Pypi"
+        uses: pypa/gh-action-pypi-publish@v1.8.11
+        with: 
+          password: ${{ secrets.PYPI_API_TOKEN }}
 
       
