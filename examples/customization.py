@@ -1,16 +1,18 @@
 import random
 from datetime import datetime
 from pathlib import Path
+from typing import Dict
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, PrivateAttr
 
-from versioned_fastapi import version, FastApiVersioner
+from versioned_fastapi import FastApiVersioner, version
 
 
 class Cookie(BaseModel):
     """Cookie recipe. Units may have been lost in translation..."""
+
     _timestamp: datetime = PrivateAttr(default_factory=datetime.now)
     butter: float
     chocolate: float
@@ -23,7 +25,7 @@ class Cookie(BaseModel):
     baking_time: float
 
 
-oven: dict[int, Cookie] = {}
+oven: Dict[int, Cookie] = {}
 
 # All FastAPI parameters should be work as intended
 app = FastAPI(
@@ -78,8 +80,7 @@ async def get_cookie_default_version(cookie_id: int):
     if current_baking_time < 0.9 * cookie.baking_time:
         oven[cookie_id] = cookie
         raise HTTPException(
-            status_code=412,
-            detail="Too early, cookie is not yet backed."
+            status_code=412, detail="Too early, cookie is not yet backed."
         )
     if current_baking_time > 1.1 * cookie.baking_time:
         raise HTTPException(
@@ -102,16 +103,22 @@ versioner = FastApiVersioner(
     prefix_format="/version{version}",  # Modify prefix format
     include_all_routes=False,  # Removes 'All Routes' from swagger docs
     primary_swagger_version=2,  # Swagger ui will load with version 2 as default
-    filter_tags=True  # Remove tags defined in 'openapi_tags' that are not used in any route
+    filter_tags=True,  # Remove tags defined in 'openapi_tags' that are not used in any route
 )
 # For even more customizations, you can override some class variables
 versioner.title_format = "{title} - Version {version}"
 versioner.description_format = "{description}"
 versioner.summary_format = "{summary} - Version {version}"
 versioner.swagger_favicon_url = "https://www.google.com/favicon.ico"
-versioner.swagger_css_urls = ("https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui.css",)
+versioner.swagger_css_urls = (
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui.css",
+)
 
 versions = versioner.version_fastapi()
 
-if __name__ == '__main__':
-    uvicorn.run(f"{Path(__file__).stem}:app", reload=True, reload_dirs=[".", "../versioned_fastapi"])
+if __name__ == "__main__":
+    uvicorn.run(
+        f"{Path(__file__).stem}:app",
+        reload=True,
+        reload_dirs=[".", "../versioned_fastapi"],
+    )

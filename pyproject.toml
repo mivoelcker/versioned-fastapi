@@ -4,12 +4,11 @@ build-backend = "hatchling.build"
 
 [project]
 name = "versioned-fastapi"
-version = "0.0.1"
 description = 'Simple versioning of FastAPI web applications'
 readme = "README.md"
 requires-python = ">=3.8"
 license = "MIT"
-keywords = ["fastapi", "version"]
+keywords = ["fastapi", "version", "versioning", "versioned-fastapi"]
 classifiers = [
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
@@ -17,13 +16,24 @@ classifiers = [
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
 ]
 dependencies = ["fastapi>=0.88.0", ]
+dynamic = ["version"]
+
+[tool.hatch.version]
+path = "versioned_fastapi/__init__.py"
+
 
 [project.urls]
 Documentation = "https://github.com/mivoelcker/versioned-fastapi#readme"
-Issues = "https://github.com/mivoelcker/versioned-fastapi/issues"
 Source = "https://github.com/mivoelcker/versioned-fastapi"
+
+[tool.hatch.build.targets.sdist]
+exclude = [".github/", ".pre-commit-config.yaml", "Pipfile", "Pipfile.lock", "scripts/"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["versioned_fastapi"]
 
 
 [tool.hatch.envs.default]
@@ -33,11 +43,24 @@ dependencies = [
   "uvicorn"
 ]
 
-[[tool.hatch.envs.test.matrix]]
-python = ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
-
-[tool.hatch.envs.test.scripts]
+[tool.hatch.envs.default.scripts]
 test = "pytest {args:tests}"
 
-[tool.hatch.build.targets.wheel]
-packages = ["versioned_fastapi"]
+
+[[tool.hatch.envs.python.matrix]]
+python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+
+[[tool.hatch.envs.fastapi.matrix]]
+fastapi_version = ["0.88.0", "0.90.0", "0.100.0", "0.105.0"]
+
+[tool.hatch.envs.fastapi]
+dependencies = [
+  "fastapi~={matrix:fastapi_version}",
+  "pytest",
+  "httpx",
+  "uvicorn"
+]
+
+[tool.hatch.envs.fastapi.scripts]
+test = "pytest --skip-openapi-tests {args:tests}"

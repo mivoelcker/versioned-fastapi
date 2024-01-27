@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Dict, List, Union
 
 import uvicorn
 from fastapi import FastAPI, APIRouter, HTTPException
@@ -7,14 +8,14 @@ from pydantic import BaseModel, Field
 from versioned_fastapi import version, FastApiVersioner
 
 # Example db
-db: dict[int, "Item"] = {}
+db: Dict[int, "Item"] = {}
 
 
 # Versioned models
 class Item(BaseModel):
     id: int
     name: str
-    description: str | None = None
+    description: Union[str, None] = None
 
 
 class ItemV2(Item):
@@ -32,10 +33,7 @@ app = FastAPI(
 )
 
 # ... and routers as normal
-items_router = APIRouter(
-    prefix="/items",
-    tags=["Items"]
-)
+items_router = APIRouter(prefix="/items", tags=["Items"])
 
 
 # Use the @version annotation to add a version
@@ -49,7 +47,7 @@ async def create_item(item: Item):
 
 @version(1)
 @items_router.get("")
-async def get_items() -> list[Item]:
+async def get_items() -> List[Item]:
     return list(db.values())
 
 
@@ -100,5 +98,9 @@ versions = FastApiVersioner(
 ).version_fastapi()
 
 
-if __name__ == '__main__':
-    uvicorn.run(f"{Path(__file__).stem}:app", reload=True, reload_dirs=[".", "../versioned_fastapi"])
+if __name__ == "__main__":
+    uvicorn.run(
+        f"{Path(__file__).stem}:app",
+        reload=True,
+        reload_dirs=[".", "../versioned_fastapi"],
+    )

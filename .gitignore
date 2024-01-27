@@ -2,6 +2,7 @@
 **/__pycache__/
 **/.pytest_cache/
 /dist/
+.ruff_cache
 
 # Editors
 .idea/
@@ -10,4 +11,4 @@
 # Environments
 .env
 .venv/
-ven/
+venv/
