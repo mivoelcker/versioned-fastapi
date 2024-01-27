@@ -30,7 +30,7 @@ Documentation = "https://github.com/mivoelcker/versioned-fastapi#readme"
 Source = "https://github.com/mivoelcker/versioned-fastapi"
 
 [tool.hatch.build.targets.sdist]
-exclude = [".github", ".pre-commit-config.yaml", "Pipfile", "Pipfile.lock"]
+exclude = [".github/", ".pre-commit-config.yaml", "Pipfile", "Pipfile.lock", "scripts/"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["versioned_fastapi"]
