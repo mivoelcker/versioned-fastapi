@@ -12,3 +12,6 @@
 .env
 .venv/
 venv/
+
+# OS
+**/.DS_Store

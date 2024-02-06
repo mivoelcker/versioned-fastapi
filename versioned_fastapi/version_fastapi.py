@@ -38,7 +38,9 @@ class FastApiVersioner:
         "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-standalone-preset.js",
     )
     """The URLs to use to load the Swagger UI JavaScript."""
-    swagger_css_urls: Union[Iterable[str], None] = None
+    swagger_css_urls: Union[Iterable[str], None] = [
+        "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css"
+    ]
     """The URLs to use to load Swagger UI CSS. Leave None to use FastAPIs default."""
     swagger_favicon_url: Union[str, None] = None
     """The URL of the favicon to use. Leave None to use FastAPIs default."""
