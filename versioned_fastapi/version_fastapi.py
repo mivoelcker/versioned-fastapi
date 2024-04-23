@@ -225,11 +225,12 @@ class FastApiVersioner:
             )
             if root_path:
                 for openapi_url in swagger_html_kwargs["swagger_ui_parameters"]["urls"]:
-                    openapi_url["url"] = root_path + openapi_url["url"]
+                    if not openapi_url["url"].startswith(root_path):
+                        openapi_url["url"] = root_path + openapi_url["url"]
 
             swagger_html_kwargs.update(
                 {
-                    "openapi_url": openapi_url,  # Will be overridden by 'urls' anyway
+                    "openapi_url": openapi_url["url"],
                     "oauth2_redirect_url": oauth2_redirect_url,
                 }
             )
