@@ -1,0 +1,231 @@
+{
+    "base": {
+        "all": {
+            "openapi": "3.1.0",
+            "info": {
+                "title": "App with mounted sub applications",
+                "version": "0.1.0"
+            },
+            "paths": {
+                "/v1/": {
+                    "get": {
+                        "summary": "Root V1",
+                        "operationId": "root_v1_v1__get",
+                        "responses": {
+                            "200": {
+                                "description": "Successful Response",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "title": "Response Root V1 V1  Get"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "/v2/": {
+                    "get": {
+                        "summary": "Root V2",
+                        "operationId": "root_v2_v2__get",
+                        "responses": {
+                            "200": {
+                                "description": "Successful Response",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "title": "Response Root V2 V2  Get"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "v1": {
+            "openapi": "3.1.0",
+            "info": {
+                "title": "App with mounted sub applications",
+                "description": "## Route version 1\n",
+                "version": "0.1.0"
+            },
+            "paths": {
+                "/v1/": {
+                    "get": {
+                        "summary": "Root V1",
+                        "operationId": "root_v1_v1__get",
+                        "responses": {
+                            "200": {
+                                "description": "Successful Response",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "title": "Response Root V1 V1  Get"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "v2": {
+            "openapi": "3.1.0",
+            "info": {
+                "title": "App with mounted sub applications",
+                "description": "## Route version 2\n",
+                "version": "0.1.0"
+            },
+            "paths": {
+                "/v2/": {
+                    "get": {
+                        "summary": "Root V2",
+                        "operationId": "root_v2_v2__get",
+                        "responses": {
+                            "200": {
+                                "description": "Successful Response",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "title": "Response Root V2 V2  Get"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "admin": {
+        "all": {
+            "openapi": "3.1.0",
+            "info": {
+                "title": "A admins page as sub application",
+                "version": "0.1.0"
+            },
+            "servers": [
+                {
+                    "url": "/admin"
+                }
+            ],
+            "paths": {
+                "/v1/": {
+                    "get": {
+                        "summary": "Admin Root V1",
+                        "operationId": "admin_root_v1_v1__get",
+                        "responses": {
+                            "200": {
+                                "description": "Successful Response",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "title": "Response Admin Root V1 V1  Get"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "/v2/": {
+                    "get": {
+                        "summary": "Admin Root V2",
+                        "operationId": "admin_root_v2_v2__get",
+                        "responses": {
+                            "200": {
+                                "description": "Successful Response",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "title": "Response Admin Root V2 V2  Get"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "v1": {
+            "openapi": "3.1.0",
+            "info": {
+                "title": "A admins page as sub application",
+                "description": "## Route version 1\n",
+                "version": "0.1.0"
+            },
+            "servers": [
+                {
+                    "url": "/admin"
+                }
+            ],
+            "paths": {
+                "/v1/": {
+                    "get": {
+                        "summary": "Admin Root V1",
+                        "operationId": "admin_root_v1_v1__get",
+                        "responses": {
+                            "200": {
+                                "description": "Successful Response",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "title": "Response Admin Root V1 V1  Get"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "v2": {
+            "openapi": "3.1.0",
+            "info": {
+                "title": "A admins page as sub application",
+                "description": "## Route version 2\n",
+                "version": "0.1.0"
+            },
+            "servers": [
+                {
+                    "url": "/admin"
+                }
+            ],
+            "paths": {
+                "/v2/": {
+                    "get": {
+                        "summary": "Admin Root V2",
+                        "operationId": "admin_root_v2_v2__get",
+                        "responses": {
+                            "200": {
+                                "description": "Successful Response",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "title": "Response Admin Root V2 V2  Get"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
