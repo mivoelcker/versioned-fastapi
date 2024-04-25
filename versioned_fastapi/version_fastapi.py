@@ -38,7 +38,7 @@ class FastApiVersioner:
         "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-standalone-preset.js",
     )
     """The URLs to use to load the Swagger UI JavaScript."""
-    swagger_css_urls: Union[Iterable[str], None] = [
+    swagger_css_urls: Iterable[str] = [
         "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css"
     ]
     """The URLs to use to load Swagger UI CSS. Leave None to use FastAPIs default."""
@@ -182,65 +182,62 @@ class FastApiVersioner:
 
     def _override_swagger_docs(self, versions: List[str]):
         """Overwrites the swagger docs to enable a dropdown menu for version selection."""
-        # Swagger api definition urls, see https://swagger.io/docs/open-source-tools/swagger-ui/usage/configuration/
-        openapi_urls = []
-        if self.include_main_openapi:
-            openapi_urls.append({"name": "All Routes", "url": self.app.openapi_url})
-        openapi_urls.extend(
-            [
-                {
-                    "name": f"Version {v}",
-                    "url": f"{self.prefix_format.format(version=v)}{self.app.openapi_url}",
-                }
-                for v in versions
-            ]
-        )
-        swagger_html_kwargs = {
-            "swagger_js_url": '"></script><script src="'.join(self.swagger_js_urls),
-            "swagger_ui_parameters": {
-                "layout": "StandaloneLayout",
-                "urls": openapi_urls,
-            },
-            "title": self.app.title + " - Swagger UI",
-        }
-        if self.primary_swagger_version:
-            swagger_html_kwargs["swagger_ui_parameters"][
-                "urls.primaryName"
-            ] = f"Version {self.primary_swagger_version}"
-        if self.swagger_css_urls:
-            swagger_html_kwargs[
-                "swagger_css_url"
-            ] = '"><link type="text/css" rel="stylesheet" href="'.join(
-                self.swagger_css_urls
-            )
-        if self.swagger_favicon_url:
-            swagger_html_kwargs["swagger_favicon_url"] = self.swagger_favicon_url
 
         async def get_versioned_swagger_ui_html(request: Request) -> HTMLResponse:
             root_path = request.scope.get("root_path", "").rstrip("/")
-            openapi_url = root_path + self.app.openapi_url  # type: ignore
+            openapi_url = f"{root_path}{self.app.openapi_url}"
             oauth2_redirect_url = (
                 self.app.swagger_ui_oauth2_redirect_url
                 and root_path + self.app.swagger_ui_oauth2_redirect_url
             )
-            if root_path:
-                for openapi_url in swagger_html_kwargs["swagger_ui_parameters"]["urls"]:
-                    openapi_url["url"] = root_path + openapi_url["url"]
 
-            swagger_html_kwargs.update(
-                {
-                    "openapi_url": openapi_url,  # Will be overridden by 'urls' anyway
-                    "oauth2_redirect_url": oauth2_redirect_url,
-                }
+            title = self.app.title + " - Swagger UI"
+            swagger_js_url = '"></script><script src="'.join(self.swagger_js_urls)
+            swagger_css_urls = '"><link type="text/css" rel="stylesheet" href="'.join(
+                self.swagger_css_urls
             )
-            if self.app.swagger_ui_parameters:
-                swagger_html_kwargs["swagger_ui_parameters"].update(
-                    self.app.swagger_ui_parameters
+
+            # Swagger api definition urls, see https://swagger.io/docs/open-source-tools/swagger-ui/usage/configuration/
+            versioned_openapi_urls = []
+            if self.include_main_openapi:
+                versioned_openapi_urls.append(
+                    {"name": "All Routes", "url": openapi_url}
                 )
+            versioned_openapi_urls.extend(
+                [
+                    {
+                        "name": f"Version {v}",
+                        "url": f"{root_path}{self.prefix_format.format(version=v)}{self.app.openapi_url}",
+                    }
+                    for v in versions
+                ]
+            )
+            swagger_ui_parameters = {
+                "layout": "StandaloneLayout",
+                "urls": versioned_openapi_urls,
+            }
+            if self.primary_swagger_version:
+                swagger_ui_parameters["urls.primaryName"] = (
+                    f"Version {self.primary_swagger_version}"
+                )
+            if self.app.swagger_ui_parameters:
+                swagger_ui_parameters.update(self.app.swagger_ui_parameters)
+
+            optional_kwargs = {}
+            if self.swagger_favicon_url:
+                optional_kwargs["swagger_favicon_url"] = self.swagger_favicon_url
 
             # It might be better to override get_swagger_ui_html completely instead of modifying its response...
-            html_body = get_swagger_ui_html(**swagger_html_kwargs).body
-            html_body = html_body.replace(
+            html_response = get_swagger_ui_html(
+                openapi_url=openapi_url,
+                title=title,
+                swagger_js_url=swagger_js_url,
+                swagger_css_url=swagger_css_urls,
+                oauth2_redirect_url=oauth2_redirect_url,
+                swagger_ui_parameters=swagger_ui_parameters,
+                **optional_kwargs,
+            )
+            html_body = html_response.body.replace(
                 b"SwaggerUIBundle.SwaggerUIStandalonePreset",
                 b"SwaggerUIStandalonePreset",
             )

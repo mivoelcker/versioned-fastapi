@@ -113,6 +113,10 @@ versioner.swagger_favicon_url = "https://www.google.com/favicon.ico"
 versioner.swagger_css_urls = (
     "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui.css",
 )
+versioner.swagger_js_urls = (
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui-bundle.js",
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui-standalone-preset.js",
+)
 
 versions = versioner.version_fastapi()
 

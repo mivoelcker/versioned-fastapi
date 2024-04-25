@@ -12,6 +12,7 @@
 .env
 .venv/
 venv/
+Pipfile.lock
 
 # OS
 **/.DS_Store
